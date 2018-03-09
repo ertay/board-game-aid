@@ -708,7 +708,13 @@ namespace BoardGameAid.Droid
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.abc_textfield_search_material = global::BoardGameAid.Droid.Resource.Drawable.abc_textfield_search_material;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.abc_vector_test = global::BoardGameAid.Droid.Resource.Drawable.abc_vector_test;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_hide_password = global::BoardGameAid.Droid.Resource.Drawable.avd_hide_password;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_hide_password_1 = global::BoardGameAid.Droid.Resource.Drawable.avd_hide_password_1;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_hide_password_2 = global::BoardGameAid.Droid.Resource.Drawable.avd_hide_password_2;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_hide_password_3 = global::BoardGameAid.Droid.Resource.Drawable.avd_hide_password_3;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_show_password = global::BoardGameAid.Droid.Resource.Drawable.avd_show_password;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_show_password_1 = global::BoardGameAid.Droid.Resource.Drawable.avd_show_password_1;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_show_password_2 = global::BoardGameAid.Droid.Resource.Drawable.avd_show_password_2;
+			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.avd_show_password_3 = global::BoardGameAid.Droid.Resource.Drawable.avd_show_password_3;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.design_bottom_navigation_item_background = global::BoardGameAid.Droid.Resource.Drawable.design_bottom_navigation_item_background;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.design_fab_background = global::BoardGameAid.Droid.Resource.Drawable.design_fab_background;
 			global::MvvmCross.Droid.Support.V7.AppCompat.Resource.Drawable.design_ic_visibility = global::BoardGameAid.Droid.Resource.Drawable.design_ic_visibility;
