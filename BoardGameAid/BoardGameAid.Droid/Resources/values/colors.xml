@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!--Get colors from: http://www.materialpalette.com/-->
-  <color name="primary">#03A9F4</color>
+  <color name="primary">#000000</color> <!-- This changes app bar bg color as well -->
   <color name="primaryDark">#0288D1</color>
   <color name="accent">#FFC107</color>
   <color name="lightPrimary">#B3E5FC</color>
