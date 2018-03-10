@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Reflection;
 using Android.Content;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -20,5 +22,19 @@ namespace BoardGameAid.Droid
         {
             return new DebugTrace();
         }
+
+        /// <summary>
+        /// Registers view assemblies so we can use them in axml layouts.
+        /// Probably some of these need to be removed beacuse they aren't used.
+        /// </summary>
+        protected override IEnumerable<Assembly> AndroidViewAssemblies => new List<Assembly>(base.AndroidViewAssemblies)
+        {
+            typeof(Android.Support.Design.Widget.NavigationView).Assembly,
+            typeof(Android.Support.Design.Widget.FloatingActionButton).Assembly,
+            typeof(Android.Support.V7.Widget.Toolbar).Assembly,
+            typeof(Android.Support.V4.Widget.DrawerLayout).Assembly,
+            typeof(Android.Support.V4.View.ViewPager).Assembly,
+            typeof(MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView).Assembly
+        };
     }
 }

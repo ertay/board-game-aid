@@ -11,7 +11,7 @@ namespace BoardGameAid.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
-            RegisterNavigationServiceAppStart<ViewModels.FirstViewModel>();
+            RegisterNavigationServiceAppStart<ViewModels.MainViewModel>();
         }
     }
 }

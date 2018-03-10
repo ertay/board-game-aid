@@ -3,10 +3,10 @@ using Android.OS;
 
 namespace BoardGameAid.Droid.Views
 {
-    [Activity(Label = "View for FirstViewModel")]
-    public class FirstView : BaseView
+    [Activity(Label = "Players")]
+    public class EditPlayersView : BaseView
     {
-        protected override int LayoutResource => Resource.Layout.FirstView;
+        protected override int LayoutResource => Resource.Layout.EditPlayersView;
 
         protected override void OnCreate(Bundle bundle)
         {

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+  <android.support.design.widget.AppBarLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:id="@+id/toolbar_layout">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        local:layout_scrollFlags="scroll|enterAlways" />
+  </android.support.design.widget.AppBarLayout>
+  <FrameLayout
+      android:id="@+id/content_frame"
+      android:layout_below="@id/toolbar_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" >
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+      <EditText
+          android:id="@+id/playerNameText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentTop="true"
+          android:layout_marginLeft="16dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginRight="16dp"
+          android:textSize="24dp"
+          android:hint="Enter player name"
+          local:MvxBind="Text PlayerName" />
+
+      <Button
+        android:id="@+id/addPlayerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerNameText"
+        android:layout_alignLeft="@+id/playerNameText"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="ADD"
+        local:MvxBind="Click AddPlayerCommand" />
+      
+      <MvxRecyclerView
+        android:id="@+id/playerList"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/playerNameText"
+        android:layout_below="@+id/addPlayerButton"
+        local:MvxItemTemplate="@layout/listitem_player"
+        local:MvxBind="ItemsSource Players" />
+      
+    </RelativeLayout>
+  </FrameLayout>
+</RelativeLayout>

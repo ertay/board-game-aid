@@ -21,16 +21,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-      <EditText
+      <Button
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:textSize="40dp"
-          local:MvxBind="Text Hello" />
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textSize="40dp"
-          local:MvxBind="Text Hello" />
+          android:text="Edit Players"
+          local:MvxBind="Click ShowEditPlayersCommand" />
+      
     </LinearLayout>
   </FrameLayout>
 </RelativeLayout>

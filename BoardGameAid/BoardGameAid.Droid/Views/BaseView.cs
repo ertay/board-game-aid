@@ -11,9 +11,9 @@ namespace BoardGameAid.Droid.Views
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
+            
             SetContentView(LayoutResource);
-
+            
             Toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
             if (Toolbar != null)
             {
