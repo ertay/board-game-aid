@@ -23,7 +23,7 @@ namespace BoardGameAid.Droid.Services
         /// <param name="message"></param>
         /// <param name="buttonText"></param>
         /// <param name="dismissCallback"></param>
-        public void ShowPopup(string title, string message, string buttonText = "ok", Action dismissCallback = null, bool dismissable = false)
+        public void ShowPopup(string title, string message, string buttonText = "ok", Action dismissCallback = null, bool dismissable = true)
         {
             var top = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
             if (top == null)

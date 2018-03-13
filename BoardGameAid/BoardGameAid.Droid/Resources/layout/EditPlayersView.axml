@@ -38,11 +38,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/playerNameText"
-        android:layout_alignLeft="@+id/playerNameText"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_toLeftOf="@+id/spacer"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="16dp"
         android:text="ADD"
         local:MvxBind="Click AddPlayerCommand" />
+
+      <View
+        android:id="@+id/spacer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerNameText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp" />
+      
+      
+      <Button
+        android:id="@+id/removePlayerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerNameText"
+        android:layout_toRightOf="@+id/spacer"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="4dp"
+        android:text="REMOVE"
+        local:MvxBind="Click RemovePlayerCommand" />
       
       <MvxRecyclerView
         android:id="@+id/playerList"
@@ -50,9 +70,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignLeft="@+id/playerNameText"
-        android:layout_below="@+id/addPlayerButton"
+        android:layout_below="@+id/removePlayerButton"
         local:MvxItemTemplate="@layout/listitem_player"
-        local:MvxBind="ItemsSource Players" />
+        local:MvxBind="ItemsSource Players; ItemClick SelectPlayerCommand" />
       
     </RelativeLayout>
   </FrameLayout>

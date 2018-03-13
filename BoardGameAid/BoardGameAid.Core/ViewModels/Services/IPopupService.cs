@@ -20,7 +20,7 @@ namespace BoardGameAid.Core.ViewModels.Services
         /// <param name="dismissCallback"></param>
         /// <param name="dismissable"></param>
         void ShowPopup(string title, string message, string buttonText = "ok", Action dismissCallback = null,
-            bool dismissable = false);
+            bool dismissable = true);
 
         /// <summary>
         /// Show a popup with two buttons.
