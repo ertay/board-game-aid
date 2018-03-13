@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
+using BoardGameAid.Core.ViewModels.Services;
+using BoardGameAid.Droid.Services;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Platform;
 
 namespace BoardGameAid.Droid
@@ -36,5 +39,16 @@ namespace BoardGameAid.Droid
             typeof(Android.Support.V4.View.ViewPager).Assembly,
             typeof(MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView).Assembly
         };
+
+        /// <summary>
+        /// Initialization stuff. We initialize services here.
+        /// </summary>
+        protected override void InitializeFirstChance()
+        {
+            base.InitializeFirstChance();
+
+            Mvx.RegisterSingleton<IPopupService>(() => new PopupService());
+
+        }
     }
 }
