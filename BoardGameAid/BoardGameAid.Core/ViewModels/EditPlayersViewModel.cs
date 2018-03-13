@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
 using BoardGameAid.Core.ViewModels.Services;
 using MvvmCross.Core.ViewModels;
@@ -58,7 +59,9 @@ namespace BoardGameAid.Core.ViewModels
         public EditPlayersViewModel(IPopupService popupService)
         {
             _popupService = popupService;
-            Players = new MvxObservableCollection<Player>();
+
+            // load players if any
+            Players = new MvxObservableCollection<Player>(Settings.PlayersSetting);
         }
 
         #endregion
@@ -94,6 +97,8 @@ namespace BoardGameAid.Core.ViewModels
                     };
 
                     Players.Add(player);
+                    SavePlayers();
+                    
                     // clean up the text field after adding a player
                     PlayerName = string.Empty;
                 }));
@@ -114,6 +119,7 @@ namespace BoardGameAid.Core.ViewModels
                     if (player != null)
                     {
                         Players.Remove(player);
+                        SavePlayers();
                     }
                     // clean up the text field after adding a player
                     PlayerName = string.Empty;
@@ -162,6 +168,14 @@ namespace BoardGameAid.Core.ViewModels
 
             // all is good
             return true;
+        }
+
+        /// <summary>
+        /// Saves playeres to storage.
+        /// </summary>
+        private void SavePlayers()
+        {
+            Settings.PlayersSetting = Players.ToList();
         }
 
         #endregion
