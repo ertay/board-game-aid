@@ -15,6 +15,13 @@
     /// </summary>
     public class SecretHitlerPlayer : Player
     {
+        public SecretHitlerPlayer(Player player, SecretHitlerRole secretHitlerRole)
+        {
+            Name = player.Name;
+            IsVisuallyImpaired = player.IsVisuallyImpaired;
+            Role = secretHitlerRole;
+        }
+
         public SecretHitlerRole Role { get; set; }
         public bool IsLiberal => Role == SecretHitlerRole.Liberal;
     }

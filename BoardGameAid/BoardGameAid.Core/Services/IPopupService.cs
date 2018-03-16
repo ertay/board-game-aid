@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BoardGameAid.Core.ViewModels.Services
+namespace BoardGameAid.Core.Services
 {
     /// <summary>
     /// Interface for creating popups / alerts

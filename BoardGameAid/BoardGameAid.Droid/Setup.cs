@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
-using BoardGameAid.Core.ViewModels.Services;
+using BoardGameAid.Core.Services;
 using BoardGameAid.Droid.Services;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;

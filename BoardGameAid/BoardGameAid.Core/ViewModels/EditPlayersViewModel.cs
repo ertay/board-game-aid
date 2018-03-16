@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
-using BoardGameAid.Core.ViewModels.Services;
+using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
 
 namespace BoardGameAid.Core.ViewModels

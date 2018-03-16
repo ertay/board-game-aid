@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BoardGameAid.Core.ViewModels.Services;
+using BoardGameAid.Core.Services;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
 using AlertDialog = Android.Support.V7.App.AlertDialog;

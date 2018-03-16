@@ -15,6 +15,7 @@ namespace BoardGameAid.Core.ViewModels
         #region commands
 
         private MvxCommand _showEditPlayersCommand;
+        private MvxCommand _startSecretHitlerCommand;
 
         public MvxCommand ShowEditPlayersCommand
         {
@@ -23,6 +24,18 @@ namespace BoardGameAid.Core.ViewModels
                 return _showEditPlayersCommand ?? (_showEditPlayersCommand = new MvxCommand(() =>
                 {
                     ShowViewModel<EditPlayersViewModel>();
+                }));
+            }
+
+        }
+
+        public MvxCommand StartSecretHitlerCommand
+        {
+            get
+            {
+                return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxCommand(() =>
+                {
+                    ShowViewModel<SecretHitlerViewModel>();
                 }));
             }
 
