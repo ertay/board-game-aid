@@ -1,3 +1,4 @@
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 
 namespace BoardGameAid.Core.ViewModels
@@ -12,31 +13,37 @@ namespace BoardGameAid.Core.ViewModels
             set => SetProperty(ref hello, value);
         }
 
+        #region constructor and services
+
+        private IMvxNavigationService _navigationService;
+
+        public MainViewModel(IMvxNavigationService navigationService)
+        {
+            _navigationService = navigationService;
+        }
+
+        #endregion
+
+
         #region commands
 
-        private MvxCommand _showEditPlayersCommand;
-        private MvxCommand _startSecretHitlerCommand;
+        private IMvxAsyncCommand _showEditPlayersCommand;
+        private IMvxAsyncCommand _startSecretHitlerCommand;
 
-        public MvxCommand ShowEditPlayersCommand
+        public IMvxAsyncCommand ShowEditPlayersCommand
         {
             get
             {
-                return _showEditPlayersCommand ?? (_showEditPlayersCommand = new MvxCommand(() =>
-                {
-                    ShowViewModel<EditPlayersViewModel>();
-                }));
+                return _showEditPlayersCommand ?? (_showEditPlayersCommand = new MvxAsyncCommand(() => _navigationService.Navigate<EditPlayersViewModel>()));
             }
 
         }
 
-        public MvxCommand StartSecretHitlerCommand
+        public IMvxAsyncCommand StartSecretHitlerCommand
         {
             get
             {
-                return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxCommand(() =>
-                {
-                    ShowViewModel<SecretHitlerViewModel>();
-                }));
+                return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxAsyncCommand(() => _navigationService.Navigate<SecretHitlerViewModel>()));
             }
 
         }
