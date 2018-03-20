@@ -24,6 +24,8 @@ namespace BoardGameAid.Core.Helpers
         private const string PlayersKey = "Players";
         private static readonly string PlayersDefault = string.Empty;
 
+        private const string ShowRoleTimerSecondsKey = "ShowRoleTimerSeconds";
+        private static readonly int ShowRoleTimerSecondsDefault = 15;
         #endregion
 
 
@@ -49,6 +51,12 @@ namespace BoardGameAid.Core.Helpers
                 string serialized = JsonConvert.SerializeObject(value);
                 AppSettings.AddOrUpdateValue(PlayersKey, serialized);
             }
+        }
+
+        public static int ShowRoleTimerSetting
+        {
+            get => AppSettings.GetValueOrDefault(ShowRoleTimerSecondsKey, ShowRoleTimerSecondsDefault);
+            set => AppSettings.AddOrUpdateValue(ShowRoleTimerSecondsKey, value);
         }
 
     }

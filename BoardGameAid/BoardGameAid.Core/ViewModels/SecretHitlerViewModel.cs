@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
@@ -32,6 +33,9 @@ namespace BoardGameAid.Core.ViewModels
         private bool _isRoleVisible;
         private bool _isPartyVisible;
         private bool _isPartyRevealGameState;
+
+        private string _showRoleTime;
+        private bool _isRoleTimerVisible;
 
         /// <summary>
         /// The current player that is looking at their role.
@@ -83,12 +87,65 @@ namespace BoardGameAid.Core.ViewModels
         }
 
         /// <summary>
+        /// Shows the remaining time until we switch to next player
+        /// </summary>
+        public string ShowRoleTime
+        {
+            get { return _showRoleTime; }
+            set
+            {
+                SetProperty(ref _showRoleTime, value);
+            }
+        }
+
+        /// <summary>
         /// Boolean to show or hide the role.
         /// </summary>
         public bool IsRoleVisible
         {
             get { return _isRoleVisible; }
-            set => SetProperty(ref _isRoleVisible, value);
+            set
+            {
+                SetProperty(ref _isRoleVisible, value);
+                RaisePropertyChanged(() => IsRoleTimerVisible);
+                RaisePropertyChanged(() => ShowOrHideText);
+
+            }
+
+        }
+
+        /// <summary>
+        /// Holds the button text for different states (hide, show).
+        /// </summary>
+        public string ShowOrHideText => IsRoleVisible ? "Hide Party" : "Show Party";
+
+        /// <summary>
+        /// Shows the role timer in the initial roles phase
+        /// </summary>
+        public bool IsRoleTimerVisible
+        {
+            get
+            {
+                // show timer if not in the party reveal phase and 
+                // when the role is visible
+                return !_isPartyRevealGameState && _isRoleVisible;
+            }
+        }
+
+        /// <summary>
+        /// We hide the show role button in the party reveal phase.
+        /// </summary>
+        public bool IsShowRoleButtonVisible
+        {
+            get { return !_isPartyRevealGameState; }
+        }
+
+        /// <summary>
+        /// Next player and show/hide party buttons are visible in the party reveal phase
+        /// </summary>
+        public bool ArePartyButtonsVisible
+        {
+            get { return _isPartyRevealGameState; }
         }
 
 
@@ -99,7 +156,9 @@ namespace BoardGameAid.Core.ViewModels
 
         private MvxCommand _showRoleCommand;
         private MvxCommand _nextPlayerCommand;
-        
+        private MvxCommand _showOrHidePartyCommand;
+
+
         /// <summary>
         /// Command to show the player role.
         /// </summary>
@@ -110,8 +169,41 @@ namespace BoardGameAid.Core.ViewModels
                 return _showRoleCommand ?? (_showRoleCommand = new MvxCommand(() =>
                 {
                     IsRoleVisible = true;
+                    Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
+                    TimeSpan time = TimeSpan.FromSeconds(Settings.ShowRoleTimerSetting);
+                    ShowRoleTime = time.ToString(@"mm\:ss");
+
+                    PclTimer roleTimer = new PclTimer(time);
+                    roleTimer.TimeElapsed += (sender, span) =>
+                    {
+                        ShowRoleTime = span.ToString(@"mm\:ss");
+
+                        if (span.TotalSeconds <= 0)
+                        {
+                            NextPlayer();
+                            Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
+
+                        }
+                    };
+                    roleTimer.StartAsync();
+
+                }, () => !IsRoleVisible));
+            }
+        }
+        /// <summary>
+        /// Command to show or hide the party.
+        /// </summary>
+        public MvxCommand ShowOrHidePartyCommand
+        {
+            get
+            {
+                return _showOrHidePartyCommand ?? (_showOrHidePartyCommand = new MvxCommand(() =>
+                {
+                    // in the party phase, we just reuse the role variable to show party
+                    IsRoleVisible = !IsRoleVisible;
                 }));
             }
+            
         }
 
         /// <summary>
@@ -123,7 +215,6 @@ namespace BoardGameAid.Core.ViewModels
             {
                 return _nextPlayerCommand ?? (_nextPlayerCommand = new MvxCommand(() =>
                 {
-                    IsRoleVisible = false;
                     
                     NextPlayer();
 
@@ -138,6 +229,9 @@ namespace BoardGameAid.Core.ViewModels
         /// </summary>
         private void NextPlayer()
         {
+            IsRoleVisible = false;
+
+
             if (++_currentPlayerIndex >= _players.Count)
             {
                 // check if we should switch to the party reveal phase
@@ -145,6 +239,8 @@ namespace BoardGameAid.Core.ViewModels
                 {
 
                     _isPartyRevealGameState = true;
+                    RaisePropertyChanged(() => ArePartyButtonsVisible);
+                    RaisePropertyChanged(() => IsShowRoleButtonVisible);
                 }
                 _currentPlayerIndex = 0;
             }
