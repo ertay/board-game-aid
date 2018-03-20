@@ -27,8 +27,11 @@ namespace BoardGameAid.Core.ViewModels
 
         private List<SecretHitlerPlayer> _players { get; }
         private SecretHitlerPlayer _currentPlayer;
+        private string _currentPlayerRoleOrParty;
         private int _currentPlayerIndex = 0;
         private bool _isRoleVisible;
+        private bool _isPartyVisible;
+        private bool _isPartyRevealGameState;
 
         /// <summary>
         /// The current player that is looking at their role.
@@ -36,17 +39,38 @@ namespace BoardGameAid.Core.ViewModels
         public SecretHitlerPlayer CurrentPlayer
         {
             get { return _currentPlayer; }
-            set => SetProperty(ref _currentPlayer, value);
+            set
+            {
+                SetProperty(ref _currentPlayer, value);
+                RaisePropertyChanged(() => CurrentPlayerRoleOrParty);
+            }
         }
 
         /// <summary>
-        /// Returns a string of who t he other fascists and hitler is.
+        /// Depending on the game state, it returns the current player role or party
+        /// </summary>
+        public string CurrentPlayerRoleOrParty
+        {
+            get
+            {
+                // if party reveal state, return the party information
+                if (_isPartyRevealGameState)
+                {
+                    return CurrentPlayer.IsLiberal ? "Liberal" : "Fascist";
+                }
+                // we're  still in the role deaaling phase, show role
+                return CurrentPlayer.Role.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Returns a string of who the other fascists and hitler is.
         /// </summary>
         public string OtherFascists
         {
             get
             {
-                if (CurrentPlayer.Role != SecretHitlerRole.Fascist)
+                if (_isPartyRevealGameState || CurrentPlayer.Role != SecretHitlerRole.Fascist)
                 {
                     return "";
                 }
@@ -75,7 +99,7 @@ namespace BoardGameAid.Core.ViewModels
 
         private MvxCommand _showRoleCommand;
         private MvxCommand _nextPlayerCommand;
-
+        
         /// <summary>
         /// Command to show the player role.
         /// </summary>
@@ -100,18 +124,35 @@ namespace BoardGameAid.Core.ViewModels
                 return _nextPlayerCommand ?? (_nextPlayerCommand = new MvxCommand(() =>
                 {
                     IsRoleVisible = false;
-                    if (++_currentPlayerIndex >= _players.Count)
-                    {
-                        // we've shown all players, show the party checking UI
-                        return;
-                    }
-                    // switch to the next player
-                    CurrentPlayer = _players[_currentPlayerIndex];
-                    RaisePropertyChanged(() => OtherFascists);
+                    
+                    NextPlayer();
+
+
                 }));
             }
         }
 
+        /// <summary>
+        /// Switches to the next player. After first pass, enables the party reveal state instead
+        /// of the role reveal state.
+        /// </summary>
+        private void NextPlayer()
+        {
+            if (++_currentPlayerIndex >= _players.Count)
+            {
+                // check if we should switch to the party reveal phase
+                if (!_isPartyRevealGameState)
+                {
+
+                    _isPartyRevealGameState = true;
+                }
+                _currentPlayerIndex = 0;
+            }
+            // switch to the next player
+            CurrentPlayer = _players[_currentPlayerIndex];
+            RaisePropertyChanged(() => OtherFascists);
+        }
+        
         #endregion
 
     }
