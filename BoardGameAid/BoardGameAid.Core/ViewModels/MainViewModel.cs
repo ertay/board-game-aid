@@ -1,3 +1,4 @@
+using BoardGameAid.Core.Helpers;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 
@@ -24,8 +25,26 @@ namespace BoardGameAid.Core.ViewModels
 
         #endregion
 
+        #region properties
 
-        #region commands
+        /// <summary>
+        /// Gets or sets the role timer in seconds.
+        /// </summary>
+        public int RoleTimerSetting
+        {
+            get { return Settings.ShowRoleTimerSetting; }
+            set
+            {
+                Settings.ShowRoleTimerSetting = value;
+                RaisePropertyChanged(() => RoleTimerSetting);
+                
+            }
+        }
+
+        #endregion
+
+
+            #region commands
 
         private IMvxAsyncCommand _showEditPlayersCommand;
         private IMvxAsyncCommand _startSecretHitlerCommand;
