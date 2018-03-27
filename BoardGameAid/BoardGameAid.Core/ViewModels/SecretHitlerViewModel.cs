@@ -74,14 +74,26 @@ namespace BoardGameAid.Core.ViewModels
         {
             get
             {
-                if (_isPartyRevealGameState || CurrentPlayer.Role != SecretHitlerRole.Fascist)
+                if (_isPartyRevealGameState)
                 {
                     return "";
                 }
-                IEnumerable<string> names = _players
-                    .Where(p => p.Name != CurrentPlayer.Name && p.Role == SecretHitlerRole.Fascist).Select(p => p.Name);
-                string hitlerName = _players.First(p => p.Role == SecretHitlerRole.Hitler).Name;
-                return $"Fascists: {string.Join(", ", names)}\n\nHitler: {hitlerName}";
+                bool showOtherFascistToHitler = CurrentPlayer != null && (_players.Count < 7 && CurrentPlayer.Role == SecretHitlerRole.Hitler);
+                if (CurrentPlayer.Role == SecretHitlerRole.Fascist || showOtherFascistToHitler)
+                {
+
+
+                    IEnumerable<string> names = _players
+                        .Where(p => p.Name != CurrentPlayer.Name && p.Role == SecretHitlerRole.Fascist)
+                        .Select(p => p.Name);
+                    string hitlerName = string.Empty;
+                    if (!showOtherFascistToHitler)
+                    {
+                        hitlerName = _players.First(p => p.Role == SecretHitlerRole.Hitler).Name;
+                    }
+                    return $"Fascists: {string.Join(", ", names)}\n\nHitler: {hitlerName}";
+                }
+                return "";
             }
             
         }
