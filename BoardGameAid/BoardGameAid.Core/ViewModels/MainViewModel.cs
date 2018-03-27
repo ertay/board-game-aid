@@ -29,6 +29,8 @@ namespace BoardGameAid.Core.ViewModels
 
         private IMvxAsyncCommand _showEditPlayersCommand;
         private IMvxAsyncCommand _startSecretHitlerCommand;
+        private IMvxAsyncCommand _startResistanceCommand;
+
 
         public IMvxAsyncCommand ShowEditPlayersCommand
         {
@@ -44,6 +46,15 @@ namespace BoardGameAid.Core.ViewModels
             get
             {
                 return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxAsyncCommand(() => _navigationService.Navigate<SecretHitlerViewModel>()));
+            }
+
+        }
+
+        public IMvxAsyncCommand StartResistanceCommand
+        {
+            get
+            {
+                return _startResistanceCommand ?? (_startResistanceCommand = new MvxAsyncCommand(() => _navigationService.Navigate<ResistanceViewModel>()));
             }
 
         }

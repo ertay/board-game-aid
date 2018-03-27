@@ -59,5 +59,54 @@ namespace BoardGameAid.Core.Services
 
             return shPlayers;
         }
+
+        public List<ResistancePlayer> GetShuffledResistancePlayers(int playerCount, string gameName)
+        {
+            // this also needs to be merged with the above and turned into a generic algorithm
+
+            Dictionary<ResistanceRole, int> roleCounts = new Dictionary<ResistanceRole, int>();
+            int spiesCount = 0;
+            switch (playerCount)
+            {
+                case 5:
+                case 6:
+                    spiesCount = 2;
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    spiesCount = 3;
+                    break;
+                case 10:
+                    spiesCount = 4;
+                    break;
+            }
+
+            roleCounts.Add(ResistanceRole.Spy, spiesCount);
+            roleCounts.Add(ResistanceRole.Loyal, playerCount - spiesCount);
+
+            // now fill a list with Roles
+            List<ResistanceRole> roles = new List<ResistanceRole>();
+            foreach (var roleCount in roleCounts)
+            {
+                for (int i = 0; i < roleCount.Value; i++)
+                {
+                    roles.Add(roleCount.Key);
+                }
+            }
+
+            // now shuffle the roles and return the list
+            roles.Shuffle();
+            List<ResistancePlayer> resistancePlayers = new List<ResistancePlayer>();
+            int index = 0;
+            foreach (var player in Settings.PlayersSetting)
+            {
+                resistancePlayers.Add(new ResistancePlayer(player, roles[index++]));
+            }
+
+            return resistancePlayers;
+        }
+
+
     }
 }

@@ -30,6 +30,12 @@
       <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="The Resistance"
+        local:MvxBind="Click StartResistanceCommand" />
+
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Edit Players"
         local:MvxBind="Click ShowEditPlayersCommand" />
       

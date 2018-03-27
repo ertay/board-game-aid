@@ -124,6 +124,9 @@
     <AndroidResource Include="Resources\layout\SecretHitlerView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\ResistanceView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="SplashScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ResistanceView.cs" />
     <Compile Include="Views\SecretHitlerView.cs" />
     <Compile Include="Views\EditPlayersView.cs" />
     <Compile Include="Views\MainView.cs" />
