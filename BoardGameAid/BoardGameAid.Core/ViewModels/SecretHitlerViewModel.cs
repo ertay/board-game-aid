@@ -8,10 +8,11 @@ using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
 using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
+using Plugin.TextToSpeech;
 
 namespace BoardGameAid.Core.ViewModels
 {
-    public class SecretHitlerViewModel : MvxViewModel
+    public class SecretHitlerViewModel : DeductionGameViewModel
     {
 
         #region constructor and services
@@ -67,6 +68,10 @@ namespace BoardGameAid.Core.ViewModels
             }
         }
 
+        // helpers to store fascist names
+        private IEnumerable<string> _fascistNames;
+        private string _hitlerPlayerName;
+
         /// <summary>
         /// Returns a string of who the other fascists and hitler is.
         /// </summary>
@@ -83,15 +88,15 @@ namespace BoardGameAid.Core.ViewModels
                 {
 
 
-                    IEnumerable<string> names = _players
+                    _fascistNames = _players
                         .Where(p => p.Name != CurrentPlayer.Name && p.Role == SecretHitlerRole.Fascist)
                         .Select(p => p.Name);
-                    string hitlerName = string.Empty;
+                    _hitlerPlayerName = string.Empty;
                     if (!showOtherFascistToHitler)
                     {
-                        hitlerName = _players.First(p => p.Role == SecretHitlerRole.Hitler).Name;
+                        _hitlerPlayerName = _players.First(p => p.Role == SecretHitlerRole.Hitler).Name;
                     }
-                    return $"Fascists: {string.Join(", ", names)}\n\nHitler: {hitlerName}";
+                    return $"Fascists: {string.Join(", ", _fascistNames)}\n\nHitler: {_hitlerPlayerName}";
                 }
                 return "";
             }
@@ -166,7 +171,7 @@ namespace BoardGameAid.Core.ViewModels
 
         #region commands and methods
 
-        private MvxCommand _showRoleCommand;
+        private MvxAsyncCommand _showRoleCommand;
         private MvxCommand _nextPlayerCommand;
         private MvxCommand _showOrHidePartyCommand;
 
@@ -174,14 +179,29 @@ namespace BoardGameAid.Core.ViewModels
         /// <summary>
         /// Command to show the player role.
         /// </summary>
-        public MvxCommand ShowRoleCommand
+        public MvxAsyncCommand ShowRoleCommand
         {
             get
             {
-                return _showRoleCommand ?? (_showRoleCommand = new MvxCommand(() =>
+                return _showRoleCommand ?? (_showRoleCommand = new MvxAsyncCommand(async () =>
                 {
-                    IsRoleVisible = true;
                     Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
+
+                    // if  player has marked visually impaired, we use tts
+                    // else we show role on screen
+                    if (CurrentPlayer.IsVisuallyImpaired)
+                    {
+                        await SpeakRoleInfo();
+                        NextPlayer();
+                        Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
+
+                        return;
+                    }
+                    else
+                    {
+                        IsRoleVisible = true;
+                    }
+                    
                     TimeSpan time = TimeSpan.FromSeconds(Settings.ShowRoleTimerSetting);
                     ShowRoleTime = time.ToString(@"mm\:ss");
 
@@ -260,7 +280,46 @@ namespace BoardGameAid.Core.ViewModels
             CurrentPlayer = _players[_currentPlayerIndex];
             RaisePropertyChanged(() => OtherFascists);
         }
-        
+
+        /// <summary>
+        /// Speaks the player role and other information if needed.
+        /// </summary>
+        /// <returns></returns>
+        public override async Task SpeakRoleInfo()
+        {
+            string message = "";
+            if (CurrentPlayer.IsLiberal)
+            {
+                message = "You are a Liberal player. You are a Liberal player. You are a Liberal player.";
+            }
+            else if (CurrentPlayer.Role == SecretHitlerRole.Fascist)
+            {
+                message = $"You are a Fascist player. {_hitlerPlayerName} is Hitler.";
+                if (_players.Count < 7)
+                {
+                    message += $" You are a Fascist player. {_hitlerPlayerName} is Hitler.";
+                }
+                else if (_players.Count < 9)
+                {
+                    message += $" {_fascistNames.First()} is the other Fascist player.";
+                }
+                else
+                {
+                    message += $" {string.Join("and ", _fascistNames)} are the other Fascists.";
+                }
+            }
+            else
+            {
+                message = "You are Hitler. You are Hitler. You are Hitler.";
+                if (_players.Count < 7)
+                {
+                    message += $" {_fascistNames.First()} is the other Fascist player.";
+                }
+            }
+
+            await CrossTextToSpeech.Current.Speak(message);
+        }
+
         #endregion
 
     }

@@ -33,11 +33,22 @@
           android:hint="Enter player name"
           local:MvxBind="Text PlayerName" />
 
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/impaired_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_below="@+id/playerNameText"
+        android:layout_alignLeft="@+id/playerNameText"
+        android:text="Visually impaired - enables voice capabilities for this player"
+        local:MvxBind="Checked IsVisuallyImpaired, Mode=TwoWay" />
+      
       <Button
         android:id="@+id/addPlayerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerNameText"
+        android:layout_below="@+id/impaired_switch"
         android:layout_toLeftOf="@+id/spacer"
         android:layout_marginRight="4dp"
         android:layout_marginLeft="16dp"
@@ -48,7 +59,7 @@
         android:id="@+id/spacer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerNameText"
+        android:layout_below="@+id/impaired_switch"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
       
@@ -57,7 +68,7 @@
         android:id="@+id/removePlayerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerNameText"
+        android:layout_below="@+id/impaired_switch"
         android:layout_toRightOf="@+id/spacer"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="4dp"

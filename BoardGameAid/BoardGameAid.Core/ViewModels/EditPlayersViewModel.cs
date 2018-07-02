@@ -41,7 +41,7 @@ namespace BoardGameAid.Core.ViewModels
         public bool IsVisuallyImpaired
         {
             get { return _isVisuallyImpaired; }
-            set => SetProperty(ref _isVisuallyImpaired, value);
+            set { SetProperty(ref _isVisuallyImpaired, value); }
 
         }
 
@@ -140,8 +140,10 @@ namespace BoardGameAid.Core.ViewModels
             {
                 return _selectPlayerCommand ?? (_selectPlayerCommand = new MvxCommand<Player>(p =>
                 {
-                    // we currently select players by just setting their names to the  text box
+                    // we currently select players by just setting their names to 
+                    // the  text box
                     PlayerName = p.Name;
+                    IsVisuallyImpaired = p.IsVisuallyImpaired;
                 }));
             }
         }
