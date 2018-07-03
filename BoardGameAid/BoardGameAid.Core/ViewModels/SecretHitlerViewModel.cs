@@ -174,6 +174,7 @@ namespace BoardGameAid.Core.ViewModels
         private MvxAsyncCommand _showRoleCommand;
         private MvxCommand _nextPlayerCommand;
         private MvxCommand _showOrHidePartyCommand;
+        private MvxAsyncCommand _speakPartyCommand;
 
 
         /// <summary>
@@ -197,10 +198,9 @@ namespace BoardGameAid.Core.ViewModels
 
                         return;
                     }
-                    else
-                    {
-                        IsRoleVisible = true;
-                    }
+
+                    IsRoleVisible = true;
+                    
                     
                     TimeSpan time = TimeSpan.FromSeconds(Settings.ShowRoleTimerSetting);
                     ShowRoleTime = time.ToString(@"mm\:ss");
@@ -236,6 +236,21 @@ namespace BoardGameAid.Core.ViewModels
                 }));
             }
             
+        }
+
+        /// <summary>
+        /// Fires the speak party method.
+        /// </summary>
+        public MvxAsyncCommand SpeakPartyCommand
+        {
+            get
+            {
+                return _speakPartyCommand ?? (_speakPartyCommand = new MvxAsyncCommand(async () =>
+                {
+                    await SpeakPartyInfo();
+                }));
+            }
+
         }
 
         /// <summary>
@@ -317,6 +332,17 @@ namespace BoardGameAid.Core.ViewModels
                 }
             }
 
+            await CrossTextToSpeech.Current.Speak(message);
+        }
+
+        /// <summary>
+        /// Speaks the party information for the selected player.
+        /// </summary>
+        /// <returns></returns>
+        public override async Task SpeakPartyInfo()
+        {
+            string message = CurrentPlayer.IsLiberal ? $"{CurrentPlayer.Name} is Liberal." : $"{CurrentPlayer.Name} is Fascist.";
+            
             await CrossTextToSpeech.Current.Speak(message);
         }
 
