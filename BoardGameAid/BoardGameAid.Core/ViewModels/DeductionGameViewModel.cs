@@ -82,6 +82,14 @@ namespace BoardGameAid.Core.ViewModels
         }
 
         /// <summary>
+        /// We hide the show role button in the party reveal phase.
+        /// </summary>
+        public bool IsShowRoleButtonVisible
+        {
+            get { return !_isPartyRevealGameState; }
+        }
+
+        /// <summary>
         /// Returns true if player is marked as visually imapaired.
         /// </summary>
         protected abstract bool IsCurrentPlayerVisuallyImpaired { get; }

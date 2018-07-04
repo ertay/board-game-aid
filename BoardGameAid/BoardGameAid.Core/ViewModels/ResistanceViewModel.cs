@@ -8,10 +8,11 @@ using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
 using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
+using Plugin.TextToSpeech;
 
 namespace BoardGameAid.Core.ViewModels
 {
-    public class ResistanceViewModel : MvxViewModel
+    public class ResistanceViewModel : DeductionGameViewModel
     {
 
         #region constructor and services
@@ -30,13 +31,6 @@ namespace BoardGameAid.Core.ViewModels
         private ResistancePlayer _currentPlayer;
         private string _currentPlayerRoleOrParty;
         private int _currentPlayerIndex = 0;
-        private bool _isRoleVisible;
-        private bool _isPartyVisible;
-        private bool _isPartyRevealGameState;
-
-        private string _showRoleTime;
-        private bool _isRoleTimerVisible;
-
         /// <summary>
         /// The current player that is looking at their role.
         /// </summary>
@@ -53,7 +47,7 @@ namespace BoardGameAid.Core.ViewModels
         /// <summary>
         /// Depending on the game state, it returns the current player role or party
         /// </summary>
-        public string CurrentPlayerRoleOrParty
+        public override string CurrentPlayerRoleOrParty
         {
             get
             {
@@ -66,6 +60,9 @@ namespace BoardGameAid.Core.ViewModels
                 return CurrentPlayer.Role.ToString();
             }
         }
+
+        // helper list to store spy names
+        private IEnumerable<string> _otherSpyNames;
 
         /// <summary>
         /// Returns a string of who the other spies are.
@@ -83,11 +80,11 @@ namespace BoardGameAid.Core.ViewModels
                     return "";
 
 
-                    IEnumerable<string> names = _players
+                    _otherSpyNames = _players
                         .Where(p => p.Name != CurrentPlayer.Name && p.Role == ResistanceRole.Spy)
                         .Select(p => p.Name);
                     
-                    return $"Spies: {string.Join(", ", names)}";
+                    return $"Spies: {string.Join(", ", _otherSpyNames)}";
                 
                 
             }
@@ -95,147 +92,18 @@ namespace BoardGameAid.Core.ViewModels
         }
 
         /// <summary>
-        /// Shows the remaining time until we switch to next player
+        /// Returns true if current player is visually impaired.
         /// </summary>
-        public string ShowRoleTime
-        {
-            get { return _showRoleTime; }
-            set
-            {
-                SetProperty(ref _showRoleTime, value);
-            }
-        }
-
-        /// <summary>
-        /// Boolean to show or hide the role.
-        /// </summary>
-        public bool IsRoleVisible
-        {
-            get { return _isRoleVisible; }
-            set
-            {
-                SetProperty(ref _isRoleVisible, value);
-                RaisePropertyChanged(() => IsRoleTimerVisible);
-                RaisePropertyChanged(() => ShowOrHideText);
-
-            }
-
-        }
-
-        /// <summary>
-        /// Holds the button text for different states (hide, show).
-        /// </summary>
-        public string ShowOrHideText => IsRoleVisible ? "Hide Role" : "Show Role";
-
-        /// <summary>
-        /// Shows the role timer in the initial roles phase
-        /// </summary>
-        public bool IsRoleTimerVisible
-        {
-            get
-            {
-                // show timer if not in the party reveal phase and 
-                // when the role is visible
-                return !_isPartyRevealGameState && _isRoleVisible;
-            }
-        }
-
-        /// <summary>
-        /// We hide the show role button in the party reveal phase.
-        /// </summary>
-        public bool IsShowRoleButtonVisible
-        {
-            get { return !_isPartyRevealGameState; }
-        }
-
-        /// <summary>
-        /// Next player and show/hide party buttons are visible in the party reveal phase
-        /// </summary>
-        public bool ArePartyButtonsVisible
-        {
-            get { return _isPartyRevealGameState; }
-        }
-
-
+        protected override bool IsCurrentPlayerVisuallyImpaired { get { return CurrentPlayer.IsVisuallyImpaired; } }
 
         #endregion
 
         #region commands and methods
-
-        private MvxCommand _showRoleCommand;
-        private MvxCommand _nextPlayerCommand;
-        private MvxCommand _showOrHidePartyCommand;
-
-
-        /// <summary>
-        /// Command to show the player role.
-        /// </summary>
-        public MvxCommand ShowRoleCommand
-        {
-            get
-            {
-                return _showRoleCommand ?? (_showRoleCommand = new MvxCommand(() =>
-                {
-                    IsRoleVisible = true;
-                    Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
-                    TimeSpan time = TimeSpan.FromSeconds(Settings.ShowRoleTimerSetting);
-                    ShowRoleTime = time.ToString(@"mm\:ss");
-
-                    PclTimer roleTimer = new PclTimer(time);
-                    roleTimer.TimeElapsed += (sender, span) =>
-                    {
-                        ShowRoleTime = span.ToString(@"mm\:ss");
-
-                        if (span.TotalSeconds <= 0)
-                        {
-                            NextPlayer();
-                            Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
-
-                        }
-                    };
-                    roleTimer.StartAsync();
-
-                }, () => !IsRoleVisible));
-            }
-        }
-        /// <summary>
-        /// Command to show or hide the party.
-        /// </summary>
-        public MvxCommand ShowOrHidePartyCommand
-        {
-            get
-            {
-                return _showOrHidePartyCommand ?? (_showOrHidePartyCommand = new MvxCommand(() =>
-                {
-                    // in the party phase, we just reuse the role variable to show party
-                    IsRoleVisible = !IsRoleVisible;
-                }));
-            }
-            
-        }
-
-        /// <summary>
-        /// Command that switches to the next player
-        /// </summary>
-        public MvxCommand NextPlayerCommand
-        {
-            get
-            {
-                return _nextPlayerCommand ?? (_nextPlayerCommand = new MvxCommand(() =>
-                {
-                    
-                    NextPlayer();
-
-
-                }));
-            }
-        }
-
         /// <summary>
         /// Switches to the next player. After first pass, enables the party reveal state instead
         /// of the role reveal state.
         /// </summary>
-        private void NextPlayer()
+        protected override void NextPlayer()
         {
             IsRoleVisible = false;
 
@@ -256,7 +124,44 @@ namespace BoardGameAid.Core.ViewModels
             CurrentPlayer = _players[_currentPlayerIndex];
             RaisePropertyChanged(() => OtherSpies);
         }
-        
+
+
+        public override async Task SpeakRoleInfo()
+        {
+            string message = "";
+            if (CurrentPlayer.Role == ResistanceRole.Loyal)
+            {
+                message = "You are a Loyalist. You are a Loyalist.";
+            }
+            else
+            {
+                if (_players.Count < 7)
+                {
+                    message = $"You are a Spy. {_otherSpyNames.First()} isthe other spy.";
+                }
+                else if (_players.Count < 10)
+                {
+                    message = $"You are a Spy. {string.Join(" and ", _otherSpyNames)} are the other spies.";
+
+                }
+                else
+                {
+                    message = $"You are a Spy. {string.Join(", ", _otherSpyNames)} are the other spies.";
+
+                }
+
+            }
+
+            await CrossTextToSpeech.Current.Speak(message);
+        }
+
+        public override async Task SpeakPartyInfo()
+        {
+            string message = $"{CurrentPlayer.Name} is a ";
+            message += CurrentPlayer.IsLoyal ? "Loyalist." : "Spy.";
+            await CrossTextToSpeech.Current.Speak(message);
+        }
+
         #endregion
 
     }

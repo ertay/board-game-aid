@@ -62,6 +62,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         local:MvxBind="Text ShowOrHideText; Click ShowOrHidePartyCommand; Visibility Visibility(ArePartyButtonsVisible)" />
+
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SPEAK PARTY"
+        local:MvxBind="Click SpeakPartyCommand; Visibility Visibility(ArePartyButtonsVisible)" />
       
       <Button
         android:layout_width="match_parent"

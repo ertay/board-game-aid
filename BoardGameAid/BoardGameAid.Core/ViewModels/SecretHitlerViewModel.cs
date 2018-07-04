@@ -83,14 +83,6 @@ namespace BoardGameAid.Core.ViewModels
 
         
         /// <summary>
-        /// We hide the show role button in the party reveal phase.
-        /// </summary>
-        public bool IsShowRoleButtonVisible
-        {
-            get { return !_isPartyRevealGameState; }
-        }
-
-        /// <summary>
         /// Returns true if current player is visually impaired.
         /// </summary>
         protected override bool IsCurrentPlayerVisuallyImpaired { get { return CurrentPlayer.IsVisuallyImpaired; } }
@@ -163,7 +155,7 @@ namespace BoardGameAid.Core.ViewModels
                 }
                 else
                 {
-                    message += $" {string.Join("and ", _fascistNames)} are the other Fascists.";
+                    message += $" {string.Join(" and ", _fascistNames)} are the other Fascists.";
                 }
             }
             else
