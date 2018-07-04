@@ -31,12 +31,7 @@ namespace BoardGameAid.Core.ViewModels
         private SecretHitlerPlayer _currentPlayer;
         private string _currentPlayerRoleOrParty;
         private int _currentPlayerIndex = 0;
-        private bool _isRoleVisible;
-        private bool _isPartyVisible;
-        private bool _isPartyRevealGameState;
-
-        private string _showRoleTime;
-        private bool _isRoleTimerVisible;
+        
 
         /// <summary>
         /// The current player that is looking at their role.
@@ -48,23 +43,6 @@ namespace BoardGameAid.Core.ViewModels
             {
                 SetProperty(ref _currentPlayer, value);
                 RaisePropertyChanged(() => CurrentPlayerRoleOrParty);
-            }
-        }
-
-        /// <summary>
-        /// Depending on the game state, it returns the current player role or party
-        /// </summary>
-        public string CurrentPlayerRoleOrParty
-        {
-            get
-            {
-                // if party reveal state, return the party information
-                if (_isPartyRevealGameState)
-                {
-                    return CurrentPlayer.IsLiberal ? "Liberal" : "Fascist";
-                }
-                // we're  still in the role deaaling phase, show role
-                return CurrentPlayer.Role.ToString();
             }
         }
 
@@ -103,52 +81,7 @@ namespace BoardGameAid.Core.ViewModels
             
         }
 
-        /// <summary>
-        /// Shows the remaining time until we switch to next player
-        /// </summary>
-        public string ShowRoleTime
-        {
-            get { return _showRoleTime; }
-            set
-            {
-                SetProperty(ref _showRoleTime, value);
-            }
-        }
-
-        /// <summary>
-        /// Boolean to show or hide the role.
-        /// </summary>
-        public bool IsRoleVisible
-        {
-            get { return _isRoleVisible; }
-            set
-            {
-                SetProperty(ref _isRoleVisible, value);
-                RaisePropertyChanged(() => IsRoleTimerVisible);
-                RaisePropertyChanged(() => ShowOrHideText);
-
-            }
-
-        }
-
-        /// <summary>
-        /// Holds the button text for different states (hide, show).
-        /// </summary>
-        public string ShowOrHideText => IsRoleVisible ? "Hide Party" : "Show Party";
-
-        /// <summary>
-        /// Shows the role timer in the initial roles phase
-        /// </summary>
-        public bool IsRoleTimerVisible
-        {
-            get
-            {
-                // show timer if not in the party reveal phase and 
-                // when the role is visible
-                return !_isPartyRevealGameState && _isRoleVisible;
-            }
-        }
-
+        
         /// <summary>
         /// We hide the show role button in the party reveal phase.
         /// </summary>
@@ -158,123 +91,33 @@ namespace BoardGameAid.Core.ViewModels
         }
 
         /// <summary>
-        /// Next player and show/hide party buttons are visible in the party reveal phase
+        /// Returns true if current player is visually impaired.
         /// </summary>
-        public bool ArePartyButtonsVisible
-        {
-            get { return _isPartyRevealGameState; }
+        protected override bool IsCurrentPlayerVisuallyImpaired { get { return CurrentPlayer.IsVisuallyImpaired; } }
+
+        public override string CurrentPlayerRoleOrParty {
+            get
+            {
+                // if party reveal state, return the party information
+                if (_isPartyRevealGameState)
+                {
+                    return CurrentPlayer.IsLiberal ? "Liberal" : "Fascist";
+                }
+                // we're  still in the role deaaling phase, show role
+                return CurrentPlayer.Role.ToString();
+            }
         }
-
-
 
         #endregion
 
         #region commands and methods
 
-        private MvxAsyncCommand _showRoleCommand;
-        private MvxCommand _nextPlayerCommand;
-        private MvxCommand _showOrHidePartyCommand;
-        private MvxAsyncCommand _speakPartyCommand;
-
-
-        /// <summary>
-        /// Command to show the player role.
-        /// </summary>
-        public MvxAsyncCommand ShowRoleCommand
-        {
-            get
-            {
-                return _showRoleCommand ?? (_showRoleCommand = new MvxAsyncCommand(async () =>
-                {
-                    Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
-
-                    // if  player has marked visually impaired, we use tts
-                    // else we show role on screen
-                    if (CurrentPlayer.IsVisuallyImpaired)
-                    {
-                        await SpeakRoleInfo();
-                        NextPlayer();
-                        Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
-
-                        return;
-                    }
-
-                    IsRoleVisible = true;
-                    
-                    
-                    TimeSpan time = TimeSpan.FromSeconds(Settings.ShowRoleTimerSetting);
-                    ShowRoleTime = time.ToString(@"mm\:ss");
-
-                    PclTimer roleTimer = new PclTimer(time);
-                    roleTimer.TimeElapsed += (sender, span) =>
-                    {
-                        ShowRoleTime = span.ToString(@"mm\:ss");
-
-                        if (span.TotalSeconds <= 0)
-                        {
-                            NextPlayer();
-                            Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
-
-                        }
-                    };
-                    roleTimer.StartAsync();
-
-                }, () => !IsRoleVisible));
-            }
-        }
-        /// <summary>
-        /// Command to show or hide the party.
-        /// </summary>
-        public MvxCommand ShowOrHidePartyCommand
-        {
-            get
-            {
-                return _showOrHidePartyCommand ?? (_showOrHidePartyCommand = new MvxCommand(() =>
-                {
-                    // in the party phase, we just reuse the role variable to show party
-                    IsRoleVisible = !IsRoleVisible;
-                }));
-            }
-            
-        }
-
-        /// <summary>
-        /// Fires the speak party method.
-        /// </summary>
-        public MvxAsyncCommand SpeakPartyCommand
-        {
-            get
-            {
-                return _speakPartyCommand ?? (_speakPartyCommand = new MvxAsyncCommand(async () =>
-                {
-                    await SpeakPartyInfo();
-                }));
-            }
-
-        }
-
-        /// <summary>
-        /// Command that switches to the next player
-        /// </summary>
-        public MvxCommand NextPlayerCommand
-        {
-            get
-            {
-                return _nextPlayerCommand ?? (_nextPlayerCommand = new MvxCommand(() =>
-                {
-                    
-                    NextPlayer();
-
-
-                }));
-            }
-        }
-
+        
         /// <summary>
         /// Switches to the next player. After first pass, enables the party reveal state instead
         /// of the role reveal state.
         /// </summary>
-        private void NextPlayer()
+        protected override void NextPlayer()
         {
             IsRoleVisible = false;
 
