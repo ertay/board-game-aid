@@ -101,6 +101,7 @@ namespace BoardGameAid.Core.ViewModels
                     
                     // clean up the text field after adding a player
                     PlayerName = string.Empty;
+                    IsVisuallyImpaired = false;
                 }));
             }
         }
@@ -123,6 +124,7 @@ namespace BoardGameAid.Core.ViewModels
                     }
                     // clean up the text field after adding a player
                     PlayerName = string.Empty;
+                    IsVisuallyImpaired = false;
                 }, () =>
                 {
                     // remove can only execute if player name exists in the list
