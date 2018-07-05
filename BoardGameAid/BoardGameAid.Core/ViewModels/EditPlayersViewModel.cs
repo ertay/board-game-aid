@@ -4,12 +4,14 @@ using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Models;
 using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Plugins;
 
 namespace BoardGameAid.Core.ViewModels
 {
     /// <summary>
     /// View model for the page where you insert/remove/edit players.
     /// </summary>
+    [Preserve(AllMembers = true)]
     public class EditPlayersViewModel : MvxViewModel
     {
 

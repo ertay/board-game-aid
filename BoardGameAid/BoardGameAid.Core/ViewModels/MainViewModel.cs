@@ -1,9 +1,11 @@
 using BoardGameAid.Core.Helpers;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Plugins;
 
 namespace BoardGameAid.Core.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public class MainViewModel
         : MvxViewModel
     {

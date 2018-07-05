@@ -4,6 +4,7 @@ using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
+using MvvmCross.Plugins;
 
 namespace BoardGameAid.Core.ViewModels
 {
@@ -11,6 +12,7 @@ namespace BoardGameAid.Core.ViewModels
     /// This class should be a parent to the other games.
     /// TODO: Refactor to hold shared logic in this class for different games.
     /// </summary>
+    [Preserve(AllMembers = true)]
     public abstract class DeductionGameViewModel : MvxViewModel
     {
         #region properties
