@@ -1,5 +1,6 @@
 using Android.App;
 using Android.OS;
+using BoardGameAid.Core.ViewModels;
 
 namespace BoardGameAid.Droid.Views
 {
@@ -13,6 +14,11 @@ namespace BoardGameAid.Droid.Views
             base.OnCreate(bundle);
 
             SupportActionBar.SetDisplayHomeAsUpEnabled(false);
+        }
+
+        public override void OnBackPressed()
+        {
+            ((ResistanceViewModel)ViewModel).QuitGame();
         }
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using BoardGameAid.Core.Helpers;
+using BoardGameAid.Core.Services;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 
 namespace BoardGameAid.Core.ViewModels
 {
@@ -220,5 +222,16 @@ namespace BoardGameAid.Core.ViewModels
         /// </summary>
         /// <returns></returns>
         public abstract Task SpeakPartyInfo();
+
+        /// <summary>
+        /// Creates a popup to ask whether we should quit the game and go back to the main menu.
+        /// </summary>
+        public void QuitGame()
+        {
+            var popupService = Mvx.Resolve<IPopupService>();
+
+            popupService.ShowPopup("Quit Game?", "Would you like to quit the game and go back to the main menu?", "MAIN MENU", "Cancel", () => Close(this), null, true);
+
+        }
     }
 }
