@@ -63,6 +63,11 @@ namespace BoardGameAid.Core.ViewModels
         public string ShowOrHideText => IsRoleVisible ? "Hide Party" : "Show Party";
 
         /// <summary>
+        /// If player is makred as visually impaired, the button text says Speak Role, otherwise it says Show Role
+        /// </summary>
+        public string ShowOrSpeakRoleText => IsCurrentPlayerVisuallyImpaired ? "Speak Role" : "Show Role";
+
+        /// <summary>
         /// Shows the role timer in the initial roles phase
         /// </summary>
         public bool IsRoleTimerVisible
@@ -118,6 +123,7 @@ namespace BoardGameAid.Core.ViewModels
                     {
                         await SpeakRoleInfo();
                         NextPlayer();
+                        RaisePropertyChanged(() => ShowOrSpeakRoleText);
                         Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
 
                         return;
@@ -138,6 +144,7 @@ namespace BoardGameAid.Core.ViewModels
                         if (span.TotalSeconds <= 0)
                         {
                             NextPlayer();
+                            RaisePropertyChanged(() => ShowOrSpeakRoleText);
                             Dispatcher.RequestMainThreadAction(() => ShowRoleCommand.RaiseCanExecuteChanged());
 
                         }

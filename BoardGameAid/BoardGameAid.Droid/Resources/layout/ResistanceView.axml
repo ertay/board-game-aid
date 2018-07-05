@@ -55,8 +55,7 @@
       <Button
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="Show Role"
-          local:MvxBind="Click ShowRoleCommand; Visibility Visibility(IsShowRoleButtonVisible)" />
+          local:MvxBind="Text ShowOrSpeakRoleText; Click ShowRoleCommand; Visibility Visibility(IsShowRoleButtonVisible)" />
 
       <Button
         android:layout_width="match_parent"
