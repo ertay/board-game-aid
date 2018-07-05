@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using BoardGameAid.Core.Helpers;
+using BoardGameAid.Core.Services;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins;
@@ -9,20 +11,15 @@ namespace BoardGameAid.Core.ViewModels
     public class MainViewModel
         : MvxViewModel
     {
-        string hello = "Hello MvvmCross";
-        public string Hello
-        {
-            get { return hello; }
-            set => SetProperty(ref hello, value);
-        }
-
         #region constructor and services
 
         private IMvxNavigationService _navigationService;
+        private IPopupService _popupService;
 
-        public MainViewModel(IMvxNavigationService navigationService)
+        public MainViewModel(IMvxNavigationService navigationService, IPopupService popupService)
         {
             _navigationService = navigationService;
+            _popupService = popupService;
         }
 
         #endregion
@@ -66,7 +63,20 @@ namespace BoardGameAid.Core.ViewModels
         {
             get
             {
-                return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxAsyncCommand(() => _navigationService.Navigate<SecretHitlerViewModel>()));
+                return _startSecretHitlerCommand ?? (_startSecretHitlerCommand = new MvxAsyncCommand(() =>
+                {
+                    if (Settings.PlayersSetting.Count < 5)
+                    {
+                        _popupService.ShowPopup("Players", "You need at least 5 players to play. Tap on 'Edit Players' to add more players.");
+                        return Task.CompletedTask;
+                    }
+                    else
+                    {
+                        return _navigationService.Navigate<SecretHitlerViewModel>();
+                    }
+                    
+                
+                }));
             }
 
         }
@@ -75,7 +85,18 @@ namespace BoardGameAid.Core.ViewModels
         {
             get
             {
-                return _startResistanceCommand ?? (_startResistanceCommand = new MvxAsyncCommand(() => _navigationService.Navigate<ResistanceViewModel>()));
+                return _startResistanceCommand ?? (_startResistanceCommand = new MvxAsyncCommand(() =>
+                {
+                    if (Settings.PlayersSetting.Count < 5)
+                    {
+                        _popupService.ShowPopup("Players", "You need at least 5 players to play. Tap on 'Edit Players' to add more players.");
+                        return Task.CompletedTask;
+                    }
+                    else
+                    {
+                        return _navigationService.Navigate<ResistanceViewModel>();
+                    }
+                }));
             }
 
         }
