@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Android.Content;
 using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Services;
@@ -20,6 +21,8 @@ namespace BoardGameAid.Droid
         {
             AppCenter.Start(ApiKeys.AppCenterDroidKey,
                 typeof(Analytics), typeof(Crashes));
+
+
         }
 
         protected override IMvxApplication CreateApp()

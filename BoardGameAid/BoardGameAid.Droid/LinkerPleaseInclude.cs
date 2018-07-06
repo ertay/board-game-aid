@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Android.App;
 using Android.Views;
 using Android.Widget;
+using BoardGameAid.Core.ViewModels;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Core.Navigation;
+using MvvmCross.Core.ViewModels;
 
 namespace BoardGameAid.Droid
 {
     // This class is never actually executed, but when Xamarin linking is enabled it does how to ensure types and properties
     // are preserved in the deployed app
+    [Android.Runtime.Preserve(AllMembers = true)]
     public class LinkerPleaseInclude
     {
         public void Include(Button button)
@@ -100,5 +105,25 @@ namespace BoardGameAid.Droid
             var context2 = new MvxTaskBasedBindingContext();
             context2.Dispose();
         }
+
+        public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
+        {
+            var s = new MvxNavigationServiceAppStart<MainViewModel>(null);
+            service = new MvxNavigationService(null, loader);
+        }
+
+        public void Include(ConsoleColor color)
+        {
+            Console.Write("");
+            Console.WriteLine("");
+            color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+        }
+
     }
 }
