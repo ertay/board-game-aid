@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
+using BoardGameAid.Core.Helpers;
 using BoardGameAid.Core.Services;
 using BoardGameAid.Droid.Services;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platform;
@@ -14,6 +18,8 @@ namespace BoardGameAid.Droid
     {
         public Setup(Context applicationContext) : base(applicationContext)
         {
+            AppCenter.Start(ApiKeys.AppCenterDroidKey,
+                typeof(Analytics), typeof(Crashes));
         }
 
         protected override IMvxApplication CreateApp()
