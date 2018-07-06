@@ -137,7 +137,7 @@ namespace BoardGameAid.Core.ViewModels
             {
                 if (_players.Count < 7)
                 {
-                    message = $"You are a Spy. {_otherSpyNames.First()} isthe other spy.";
+                    message = $"You are a Spy. {_otherSpyNames.First()} is the other spy.";
                 }
                 else if (_players.Count < 10)
                 {
