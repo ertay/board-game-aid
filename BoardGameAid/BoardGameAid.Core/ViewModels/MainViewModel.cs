@@ -15,11 +15,13 @@ namespace BoardGameAid.Core.ViewModels
 
         private IMvxNavigationService _navigationService;
         private IPopupService _popupService;
+        private IEmailService _emailService;
 
-        public MainViewModel(IMvxNavigationService navigationService, IPopupService popupService)
+        public MainViewModel(IMvxNavigationService navigationService, IPopupService popupService, IEmailService emailService)
         {
             _navigationService = navigationService;
             _popupService = popupService;
+            _emailService = emailService;
         }
 
         #endregion
@@ -48,7 +50,7 @@ namespace BoardGameAid.Core.ViewModels
         private IMvxAsyncCommand _showEditPlayersCommand;
         private IMvxAsyncCommand _startSecretHitlerCommand;
         private IMvxAsyncCommand _startResistanceCommand;
-
+        private IMvxCommand _sendFeedbackCommand;
 
         public IMvxAsyncCommand ShowEditPlayersCommand
         {
@@ -97,6 +99,19 @@ namespace BoardGameAid.Core.ViewModels
                         return _navigationService.Navigate<ResistanceViewModel>();
                     }
                 }));
+            }
+
+        }
+
+        /// <summary>
+        /// Commands used to send feedback email.
+        /// </summary>
+        public IMvxCommand SendFeedbackCommand
+        {
+            get
+            {
+                return _sendFeedbackCommand ?? (_sendFeedbackCommand = new MvxCommand(() =>
+                _emailService.SendEmail("sightlessfun@outlook.com", "Board Game Aid Feedback")));
             }
 
         }

@@ -57,6 +57,7 @@ namespace BoardGameAid.Droid
             base.InitializeFirstChance();
 
             Mvx.RegisterSingleton<IPopupService>(() => new PopupService());
+            Mvx.RegisterSingleton<IEmailService>(() => new EmailService());
 
         }
     }
