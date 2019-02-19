@@ -76,12 +76,12 @@ namespace BoardGameAid.Core.ViewModels
                     return "";
                 }
 
-                if (CurrentPlayer.Role == ResistanceRole.Loyal)
+                if (CurrentPlayer.IsLoyal && CurrentPlayer.Role != ResistanceRole.Merlin)
                     return "";
 
 
                     _otherSpyNames = _players
-                        .Where(p => p.Name != CurrentPlayer.Name && p.Role == ResistanceRole.Spy)
+                        .Where(p => p.Name != CurrentPlayer.Name && !p.IsLoyal)
                         .Select(p => p.Name);
                     
                     return $"Spies: {string.Join(", ", _otherSpyNames)}";
@@ -133,20 +133,26 @@ namespace BoardGameAid.Core.ViewModels
             {
                 message = "You are a Loyalist. You are a Loyalist.";
             }
+            else if (CurrentPlayer.Role == ResistanceRole.Merlin)
+            {
+                message = $"You are Merlin. {string.Join(", ", _otherSpyNames)} are spies.";
+            }
             else
             {
+                message = CurrentPlayer.Role == ResistanceRole.Assassin ? "You are the Assassin. " : "You are a Spy. ";
+
                 if (_players.Count < 7)
                 {
-                    message = $"You are a Spy. {_otherSpyNames.First()} is the other spy.";
+                    message += $"{_otherSpyNames.First()} is the other spy.";
                 }
                 else if (_players.Count < 10)
                 {
-                    message = $"You are a Spy. {string.Join(" and ", _otherSpyNames)} are the other spies.";
+                    message += $"{string.Join(" and ", _otherSpyNames)} are the other spies.";
 
                 }
                 else
                 {
-                    message = $"You are a Spy. {string.Join(", ", _otherSpyNames)} are the other spies.";
+                    message += $"{string.Join(", ", _otherSpyNames)} are the other spies.";
 
                 }
 

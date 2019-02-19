@@ -95,6 +95,15 @@ namespace BoardGameAid.Core.Services
                 }
             }
 
+            // set the special character roles
+            // should grab this from settings for 
+            // optional characters
+            roles[roles.IndexOf(ResistanceRole.Loyal)] = ResistanceRole.Merlin;
+            roles[roles.IndexOf(ResistanceRole.Spy)] = ResistanceRole.Assassin;
+            ;
+            
+
+
             // now shuffle the roles and return the list
             roles.Shuffle();
             List<ResistancePlayer> resistancePlayers = new List<ResistancePlayer>();

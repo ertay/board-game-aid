@@ -3,7 +3,10 @@ namespace BoardGameAid.Core.Models
     public enum ResistanceRole
     {
         Loyal,
-        Spy
+        Spy,
+        Merlin,
+        Assassin,
+
 
     }
 
@@ -20,6 +23,7 @@ namespace BoardGameAid.Core.Models
         }
 
         public ResistanceRole Role { get; set; }
-        public bool IsLoyal => Role == ResistanceRole.Loyal;
+        public bool IsLoyal => Role == ResistanceRole.Loyal || 
+                               Role == ResistanceRole.Merlin;
     }
 }

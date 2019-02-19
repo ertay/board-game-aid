@@ -4,7 +4,7 @@ using BoardGameAid.Core.ViewModels;
 
 namespace BoardGameAid.Droid.Views
 {
-    [Activity(Label = "The Resistance")]
+    [Activity(Label = "Resistance: Avalon")]
     public class ResistanceView : BaseView
     {
         protected override int LayoutResource => Resource.Layout.ResistanceView;
