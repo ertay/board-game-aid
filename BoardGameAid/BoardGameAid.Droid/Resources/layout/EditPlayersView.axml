@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/impaired_switch"
-        android:layout_toRightOf="@+id/spacer"
+            android:layout_toRightOf="@+id/spacer"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="4dp"
         android:text="REMOVE"

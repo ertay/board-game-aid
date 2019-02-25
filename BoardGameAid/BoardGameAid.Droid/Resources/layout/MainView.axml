@@ -54,6 +54,39 @@
         android:inputType="number"
         local:MvxBind="Text RoleTimerSetting"/>
 
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/percival_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Percival"
+        local:MvxBind="Checked EnablePercival, Mode=TwoWay" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/morgana_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Morgana"
+        local:MvxBind="Checked EnableMorgana, Mode=TwoWay" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/mordred_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Mordred"
+        local:MvxBind="Checked EnableMordred, Mode=TwoWay" />
+
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/oberon_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Oberon"
+        local:MvxBind="Checked EnableOberon, Mode=TwoWay" />
+      
       <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

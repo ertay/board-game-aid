@@ -76,12 +76,35 @@ namespace BoardGameAid.Core.ViewModels
                     return "";
                 }
 
-                if (CurrentPlayer.IsLoyal && CurrentPlayer.Role != ResistanceRole.Merlin)
+                // loyal player or Oberon don't know anything
+                if (CurrentPlayer.Role == ResistanceRole.Loyal ||
+                    CurrentPlayer.Role == ResistanceRole.Oberon)
                     return "";
 
-
+                // show Merlin and Morgana to Percival
+                if (CurrentPlayer.Role == ResistanceRole.Percival)
+                {
                     _otherSpyNames = _players
-                        .Where(p => p.Name != CurrentPlayer.Name && !p.IsLoyal)
+                        .Where(p => p.Role == ResistanceRole.Merlin || p.Role == ResistanceRole.Morgana)
+                        .Select(p => p.Name);
+
+                    return $"Merlin: {string.Join(" or ", _otherSpyNames)}";
+                }
+
+                // reveal spies to Merlin, except Mordred
+                if (CurrentPlayer.Role == ResistanceRole.Merlin)
+                {
+                    _otherSpyNames = _players
+                        .Where(p => !p.IsLoyal && p.Role != ResistanceRole.Mordred)
+                        .Select(p => p.Name);
+
+                    return $"Spies: {string.Join(", ", _otherSpyNames)}";
+                }
+
+                // spies see other spies, but  not Oberon
+                
+                _otherSpyNames = _players
+                        .Where(p => p.Name != CurrentPlayer.Name && !p.IsLoyal && p.Role != ResistanceRole.Oberon)
                         .Select(p => p.Name);
                     
                     return $"Spies: {string.Join(", ", _otherSpyNames)}";
@@ -137,9 +160,29 @@ namespace BoardGameAid.Core.ViewModels
             {
                 message = $"You are Merlin. {string.Join(", ", _otherSpyNames)} are spies.";
             }
+            else if (CurrentPlayer.Role == ResistanceRole.Percival)
+            {
+                message = _otherSpyNames.Count()== 1 ? 
+                    $"You are Percival. {_otherSpyNames.First()} is Merlin." : 
+                    $"You are Percival. {string.Join(" or ", _otherSpyNames)} is Merlin.";
+            }
+            else if (CurrentPlayer.Role == ResistanceRole.Oberon)
+            {
+                message = "You are Oberon. You are Oberon.";
+            }
             else
             {
-                message = CurrentPlayer.Role == ResistanceRole.Assassin ? "You are the Assassin. " : "You are a Spy. ";
+                if (CurrentPlayer.Role == ResistanceRole.Assassin ||
+                    CurrentPlayer.Role == ResistanceRole.Spy)
+                {
+                    message = CurrentPlayer.Role == ResistanceRole.Assassin
+                        ? "You are the Assassin. "
+                        : "You are a Spy. ";
+                }
+                else
+                {
+                    message = $"You are {CurrentPlayer.Role}.";
+                }
 
                 if (_players.Count < 7)
                 {

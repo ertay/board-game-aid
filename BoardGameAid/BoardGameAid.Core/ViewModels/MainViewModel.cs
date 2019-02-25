@@ -42,6 +42,62 @@ namespace BoardGameAid.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// Enable or disable Percival
+        /// </summary>
+        public bool EnablePercival
+        {
+            get { return Settings.IsPercivalEnabledSetting; }
+            set
+            {
+                Settings.IsPercivalEnabledSetting= value;
+                RaisePropertyChanged(() => EnablePercival);
+
+            }
+        }
+
+        /// <summary>
+        /// Enable or disable Morgana
+        /// </summary>
+        public bool EnableMorgana
+        {
+            get { return Settings.IsMorganaEnabledSetting; }
+            set
+            {
+                Settings.IsMorganaEnabledSetting = value;
+                RaisePropertyChanged(() => EnableMorgana);
+
+            }
+        }
+
+        /// <summary>
+        /// Enable or Disable Mordred
+        /// </summary>
+        public bool EnableMordred
+        {
+            get { return Settings.IsMordredEnabledSetting; }
+            set
+            {
+                Settings.IsMordredEnabledSetting= value;
+                RaisePropertyChanged(() => EnableMordred);
+
+            }
+        }
+
+        /// <summary>
+        /// Enable or Disable Oberon
+        /// </summary>
+        public bool EnableOberon
+        {
+            get { return Settings.IsOberonEnabledSetting; }
+            set
+            {
+                Settings.IsOberonEnabledSetting= value;
+                RaisePropertyChanged(() => EnableOberon);
+
+            }
+        }
+
         #endregion
 
 

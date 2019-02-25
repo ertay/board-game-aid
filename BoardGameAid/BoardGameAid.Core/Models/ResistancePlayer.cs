@@ -6,6 +6,10 @@ namespace BoardGameAid.Core.Models
         Spy,
         Merlin,
         Assassin,
+        Percival,
+        Morgana,
+        Mordred,
+        Oberon
 
 
     }
@@ -24,6 +28,7 @@ namespace BoardGameAid.Core.Models
 
         public ResistanceRole Role { get; set; }
         public bool IsLoyal => Role == ResistanceRole.Loyal || 
-                               Role == ResistanceRole.Merlin;
+                               Role == ResistanceRole.Merlin ||
+                               Role == ResistanceRole.Percival;
     }
 }

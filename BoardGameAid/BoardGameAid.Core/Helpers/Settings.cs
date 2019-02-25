@@ -26,6 +26,12 @@ namespace BoardGameAid.Core.Helpers
 
         private const string ShowRoleTimerSecondsKey = "ShowRoleTimerSeconds";
         private static readonly int ShowRoleTimerSecondsDefault = 15;
+
+        private const string IsPercivalEnabledKey= "IsPercivalEnabled";
+        private const string IsMorganaEnabledKey = "IsMorganaEnabled";
+        private const string IsMordredEnabledKey= "IsMordredEnabled";
+        private const string IsOberonEnabledKey = "IsOberonEnabled";
+
         #endregion
 
 
@@ -59,5 +65,44 @@ namespace BoardGameAid.Core.Helpers
             set => AppSettings.AddOrUpdateValue(ShowRoleTimerSecondsKey, value);
         }
 
+
+        /// <summary>
+        /// Setting to enable/disable Percival
+        /// </summary>
+        public static bool IsPercivalEnabledSetting
+        {
+            get => AppSettings.GetValueOrDefault(IsPercivalEnabledKey, false);
+            set => AppSettings.AddOrUpdateValue(IsPercivalEnabledKey, value);
+        }
+
+        /// <summary>
+        /// Setting  to enable or disable Morgana
+        /// </summary>
+        public static bool IsMorganaEnabledSetting
+        {
+            get => AppSettings.GetValueOrDefault(IsMorganaEnabledKey, false);
+            set => AppSettings.AddOrUpdateValue(IsMorganaEnabledKey, value);
+        }
+
+        /// <summary>
+        /// Setting to enable or disabale Mordred
+        /// </summary>
+        public static bool IsMordredEnabledSetting
+        {
+            get => AppSettings.GetValueOrDefault(IsMordredEnabledKey, false);
+            set => AppSettings.AddOrUpdateValue(IsMordredEnabledKey, value);
+        }
+
+        /// <summary>
+        /// Setting to enable or disable Oberon
+        /// </summary>
+        public static bool IsOberonEnabledSetting
+        {
+            get => AppSettings.GetValueOrDefault(IsOberonEnabledKey, false);
+            set => AppSettings.AddOrUpdateValue(IsOberonEnabledKey, value);
+        }
     }
 }
+
+
+

@@ -100,10 +100,28 @@ namespace BoardGameAid.Core.Services
             // optional characters
             roles[roles.IndexOf(ResistanceRole.Loyal)] = ResistanceRole.Merlin;
             roles[roles.IndexOf(ResistanceRole.Spy)] = ResistanceRole.Assassin;
-            ;
+
+            if (Settings.IsPercivalEnabledSetting)
+            {
+                roles[roles.IndexOf(ResistanceRole.Loyal)] = ResistanceRole.Percival;
+            }
+
+            if (Settings.IsMorganaEnabledSetting)
+            {
+                roles[roles.IndexOf(ResistanceRole.Spy)] = ResistanceRole.Morgana;
+            }
+
+            if (Settings.IsMordredEnabledSetting)
+            {
+                roles[roles.IndexOf(ResistanceRole.Spy)] = ResistanceRole.Mordred;
+            }
+
+            if (Settings.IsOberonEnabledSetting)
+            {
+                roles[roles.IndexOf(ResistanceRole.Spy)] = ResistanceRole.Oberon;
+            }
+
             
-
-
             // now shuffle the roles and return the list
             roles.Shuffle();
             List<ResistancePlayer> resistancePlayers = new List<ResistancePlayer>();
